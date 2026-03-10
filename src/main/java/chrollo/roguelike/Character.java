@@ -49,6 +49,7 @@ public class Character {
         public Card(Character c) {
             super(width, height);
             this.setFill(c.color);
+            this.setStroke(Color.BLACK);
             this.c = c;
 
             hoverListener();
