@@ -8,10 +8,10 @@ import java.util.ArrayList;
 
 public class Deck extends Pane {
 
-    int cardWidth = 200;
+    int cardWidth = 125;
 
     ArrayList<Character> cards = new ArrayList<>();
-
+    ArrayList<Character.Card> originalOrder = new ArrayList<>();
 
     public Deck() {
         cards.add(new Character(100, 20, "Knight", "knight.png",Color.BEIGE));
@@ -35,11 +35,20 @@ public class Deck extends Pane {
 
         for (int i = 0; i < cards.size(); i++) {
 
-            Character.Card newCard = new Character.Card(cards.get(i));
+            Character.Card newCard = new Character.Card(cards.get(i), this);
             newCard.setLayoutX(i * overlap);
             newCard.setLayoutY(25);
-
+            originalOrder.add(newCard);
             this.getChildren().add(newCard);
+        }
+    }
+
+    public void resetZindex(Character.Card card) {
+
+        int correctZ = originalOrder.indexOf(card);
+        if (correctZ != -1) {
+            this.getChildren().remove(card);
+            this.getChildren().add(correctZ, card);
         }
     }
 }

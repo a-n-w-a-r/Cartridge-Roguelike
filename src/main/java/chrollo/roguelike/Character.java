@@ -38,19 +38,21 @@ public class Character {
     }
 
     public static class Card extends Rectangle {
-        static double height = 200;
-        static double width = 200;
+        static double height = 125;
+        static double width = 125;
 
         int x;
         int y;
 
         Character c;
+        Deck parentDeck;
 
-        public Card(Character c) {
+        public Card(Character c, Deck parentDeck) {
             super(width, height);
             this.setFill(c.color);
             this.setStroke(Color.BLACK);
             this.c = c;
+            this.parentDeck = parentDeck;
 
             hoverListener();
         }
@@ -74,6 +76,7 @@ public class Character {
 
             this.setOnMouseExited(event -> {
                 moveUp.stop();
+                parentDeck.resetZindex(this);
                 moveDown.playFromStart();
 //                System.out.println("mouse is not hovered over: ");
             });
