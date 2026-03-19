@@ -5,8 +5,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
-public class Character {
+import java.util.UUID;
 
+public class Character {
+    private String MyUUID;
     int maxHealth;
     int damage;
     String name;
@@ -14,6 +16,7 @@ public class Character {
     Color color;
 
     public Character (int maxHealth, int damage, String name, String spritePath, Color color) {
+        this.MyUUID = UUID.randomUUID().toString();
         this.maxHealth = maxHealth;
         this.damage = damage;
         this.name = name;
@@ -37,6 +40,9 @@ public class Character {
         return spritePath;
     }
 
+    public String getUniqueID() {return MyUUID;}
+
+
     public static class Card extends Rectangle {
         static double height = 125;
         static double width = 125;
@@ -47,14 +53,23 @@ public class Character {
         Character c;
         Deck parentDeck;
 
+        boolean inDeck;
+
         public Card(Character c, Deck parentDeck) {
             super(width, height);
             this.setFill(c.color);
             this.setStroke(Color.BLACK);
+            this.setStrokeWidth(3);
             this.c = c;
             this.parentDeck = parentDeck;
+            this.inDeck = true;
 
             hoverListener();
+            clickListener();
+        }
+
+        public void setInDeck(boolean bool) {
+            this.inDeck = bool;
         }
 
         private void hoverListener() {
@@ -68,6 +83,9 @@ public class Character {
             moveDown.setToY(0);
 
             this.setOnMouseEntered(event -> {
+                if (!inDeck) {
+                    return;
+                }
                 moveDown.stop();
                 this.toFront();
                 moveUp.playFromStart();
@@ -75,10 +93,23 @@ public class Character {
             });
 
             this.setOnMouseExited(event -> {
+                if (!inDeck) {
+                    return;
+                }
                 moveUp.stop();
                 parentDeck.resetZindex(this);
                 moveDown.playFromStart();
 //                System.out.println("mouse is not hovered over: ");
+            });
+        }
+
+        private void clickListener() {
+            this.setOnMouseClicked(event -> {
+                if (!inDeck){
+                    return;
+                }
+                String id = this.c.getUniqueID();
+                parentDeck.setSelectedCard(this);
             });
         }
     }

@@ -2,7 +2,6 @@ package chrollo.roguelike;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 
@@ -12,6 +11,9 @@ public class Deck extends Pane {
 
     ArrayList<Character> cards = new ArrayList<>();
     ArrayList<Character.Card> originalOrder = new ArrayList<>();
+
+    private String selectedCardId;
+    private Character.Card selectedCard;
 
     public Deck() {
         cards.add(new Character(100, 20, "Knight", "knight.png",Color.BEIGE));
@@ -51,4 +53,17 @@ public class Deck extends Pane {
             this.getChildren().add(correctZ, card);
         }
     }
+
+    public void setSelectedCard(Character.Card selectedCard) {
+
+        if (this.selectedCard != null) {
+            this.selectedCard.setStroke(Color.BLACK);
+        }
+        this.selectedCard = selectedCard;
+        this.selectedCard.setStroke(Color.GOLD);
+    }
+
+    public Character.Card getSelectedCard() {
+        return selectedCard;
+        }
 }

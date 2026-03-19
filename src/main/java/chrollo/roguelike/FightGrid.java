@@ -12,11 +12,18 @@ public class FightGrid extends GridPane {
     int rows = 2;
     int SLOT_SIZE = 125;
 
+    private FightManager manager;
+
     public FightGrid() {
         this.setHgap(15);
         this.setVgap(30);
 //        this.setAlignment(Pos.CENTER);
 //        this.setPrefSize(480, 220);
+//        createSlots();
+    }
+
+    public void setManager(FightManager manager) {
+        this.manager = manager;
         createSlots();
     }
 
@@ -26,6 +33,16 @@ public class FightGrid extends GridPane {
                 Rectangle slot = new Rectangle(SLOT_SIZE, SLOT_SIZE);
                 slot.setFill(Color.TRANSPARENT);
                 slot.setStroke(Color.web("#555555")); // Dark gray border
+
+                final int finalCol = col;
+                final int finalRow = row;
+
+                slot.setOnMouseClicked(event -> {
+                    if (manager != null) {
+                        manager.moveCardToGrid(finalCol, finalRow);
+                    }
+                });
+
                 this.add(slot, col, row);
             }
         }
