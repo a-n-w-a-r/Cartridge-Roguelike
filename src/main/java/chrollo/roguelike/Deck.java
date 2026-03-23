@@ -1,5 +1,6 @@
 package chrollo.roguelike;
 
+import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
@@ -32,16 +33,40 @@ public class Deck extends Pane {
 
     public void showDeck() {
 
+        this.getChildren().clear();
+        originalOrder.clear();
+
+        for (Character data : cards) {
+
+            if (data.inDeck) {
+                Character.Card newCard = new Character.Card(data, this);
+                this.getChildren().add(newCard);
+            }
+        }
+        deckLayout();
+    }
+
+    public void deckLayout() {
+        int remainingCards = this.getChildren().size();
+
+        if (remainingCards == 0) {
+            return;
+        }
+
         double maxDeckWidth = this.getPrefWidth() - cardWidth;
-        double overlap = maxDeckWidth / (cards.size() - 1);
+        double overlap = (remainingCards > 1) ? maxDeckWidth / (remainingCards - 1) : 0;
 
-        for (int i = 0; i < cards.size(); i++) {
+        originalOrder.clear();
 
-            Character.Card newCard = new Character.Card(cards.get(i), this);
-            newCard.setLayoutX(i * overlap);
-            newCard.setLayoutY(25);
-            originalOrder.add(newCard);
-            this.getChildren().add(newCard);
+        int cardIndex = 0;
+        for (Node child : this.getChildren()) {
+            if (child instanceof Character.Card card) {
+                card.setLayoutX(cardIndex * overlap);
+                card.setLayoutY(25);
+
+                originalOrder.add(card);
+                cardIndex++;
+            }
         }
     }
 
@@ -59,8 +84,10 @@ public class Deck extends Pane {
         if (this.selectedCard != null) {
             this.selectedCard.setStroke(Color.BLACK);
         }
-        this.selectedCard = selectedCard;
-        this.selectedCard.setStroke(Color.GOLD);
+        if (selectedCard != null) {
+            this.selectedCard = selectedCard;
+            this.selectedCard.setStroke(Color.GOLD);
+        }
     }
 
     public Character.Card getSelectedCard() {

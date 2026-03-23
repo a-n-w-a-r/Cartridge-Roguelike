@@ -22,13 +22,15 @@ public class FightManager {
 
         if (selectedCard != null) {
             myDeck.getChildren().remove(selectedCard);
+            myDeck.deckLayout();
+            myFightGrid.add(selectedCard, col, row);
 
-            selectedCard.setInDeck(false);
+            selectedCard.c.setInDeck(false);
             selectedCard.setTranslateY(0);
             selectedCard.setStroke(Color.BLACK);
 
-            myFightGrid.add(selectedCard, col, row);
             myDeck.setSelectedCard(null);
+            myDeck.showDeck();
         }
     }
 }

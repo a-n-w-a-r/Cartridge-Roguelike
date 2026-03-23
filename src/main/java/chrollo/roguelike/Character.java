@@ -15,6 +15,8 @@ public class Character {
     String spritePath;
     Color color;
 
+    boolean inDeck;
+
     public Character (int maxHealth, int damage, String name, String spritePath, Color color) {
         this.MyUUID = UUID.randomUUID().toString();
         this.maxHealth = maxHealth;
@@ -22,6 +24,7 @@ public class Character {
         this.name = name;
         this.spritePath = spritePath;
         this.color = color;
+        this.inDeck = true;
     }
 
     public int getMaxHealth() {
@@ -42,6 +45,10 @@ public class Character {
 
     public String getUniqueID() {return MyUUID;}
 
+    public void setInDeck(boolean bool) {
+        this.inDeck = bool;
+    }
+
 
     public static class Card extends Rectangle {
         static double height = 125;
@@ -53,8 +60,6 @@ public class Character {
         Character c;
         Deck parentDeck;
 
-        boolean inDeck;
-
         public Card(Character c, Deck parentDeck) {
             super(width, height);
             this.setFill(c.color);
@@ -62,14 +67,9 @@ public class Character {
             this.setStrokeWidth(3);
             this.c = c;
             this.parentDeck = parentDeck;
-            this.inDeck = true;
 
             hoverListener();
             clickListener();
-        }
-
-        public void setInDeck(boolean bool) {
-            this.inDeck = bool;
         }
 
         private void hoverListener() {
@@ -83,7 +83,7 @@ public class Character {
             moveDown.setToY(0);
 
             this.setOnMouseEntered(event -> {
-                if (!inDeck) {
+                if (!c.inDeck) {
                     return;
                 }
                 moveDown.stop();
@@ -93,7 +93,7 @@ public class Character {
             });
 
             this.setOnMouseExited(event -> {
-                if (!inDeck) {
+                if (!c.inDeck) {
                     return;
                 }
                 moveUp.stop();
@@ -105,7 +105,7 @@ public class Character {
 
         private void clickListener() {
             this.setOnMouseClicked(event -> {
-                if (!inDeck){
+                if (!c.inDeck){
                     return;
                 }
                 String id = this.c.getUniqueID();
